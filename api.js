@@ -2,7 +2,7 @@ module.exports = function (app, db) {
 
 	app.get('/api/test', function (req, res) {
 		res.json({
-			name: ''
+			name: 'joe'
 		});
 	});
 
@@ -11,7 +11,7 @@ module.exports = function (app, db) {
 		const { gender, season } = req.query;
 		let garments = [];
 		// add some sql queries that filter on gender & season
-
+		garments = await db.many('select * from garment where gender = $1 and season = $2', [gender, season])
 		res.json({
 			data: garments
 		})
@@ -25,7 +25,6 @@ module.exports = function (app, db) {
 
 			const { id } = req.params;
 			// const garment = await db.oneOrNone(`select * from garment where id = $1`, [id]);
-
 			// you could use code like this if you want to update on any column in the table
 			// and allow users to only specify the fields to update
 
@@ -50,7 +49,7 @@ module.exports = function (app, db) {
 		try {
 			const { id } = req.params;
 			// get the garment from the database
-			const garment = null;
+			const garment = await db.one('select * from garment where id=$1',[id]);
 
 			res.json({
 				status: 'success',
@@ -102,6 +101,7 @@ module.exports = function (app, db) {
 		try {
 			const { gender } = req.query;
 			// delete the garments with the specified gender
+			await db.none('delete from garment where gender = $1', [gender])
 
 			res.json({
 				status: 'success'
