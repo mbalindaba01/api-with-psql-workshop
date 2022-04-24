@@ -10,8 +10,17 @@ module.exports = function (app, db) {
 
 		const { gender, season } = req.query;
 		let garments = [];
+
+		if(gender && season){
+			garments = await db.many('select * from garment where gender = $1 and season = $2', [gender, season])
+		}else if(gender && !season){
+			garments = await db.many('select * from garment where gender = $1', [gender])
+		}else if(season && !gender){
+			garments = await db.many('select * from garment where season = $1', [season])
+		}else {
+			garments = await db.many('select * from garment')
+		}
 		// add some sql queries that filter on gender & season
-		garments = await db.many('select * from garment where gender = $1 and season = $2', [gender, season])
 		res.json({
 			data: garments
 		})
