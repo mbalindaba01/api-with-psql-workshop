@@ -33,12 +33,36 @@ module.exports = function (app, db) {
 			// use an update query...
 
 			const { id } = req.params;
-			// const garment = await db.oneOrNone(`select * from garment where id = $1`, [id]);
+			const garment = await db.oneOrNone(`select * from garment where id = $1`, [id]);
 			// you could use code like this if you want to update on any column in the table
 			// and allow users to only specify the fields to update
 
-			// let params = { ...garment, ...req.body };
-			// const { description, price, img, season, gender } = params;
+			let params = { ...garment, ...req.body };
+			const { description, price, img, season, gender } = params;
+
+			let statement = `update garment set`
+			let hasBeenUpdated = false
+
+			if(description){
+				hasBeenUpdated = true
+				await db.none(`${statement} description = $1 where id = $2`, [description, id])
+			}
+			
+			if(price && hasBeenUpdated){
+				await db.none(`${statement} price = $1 where id = $2`, [price, id])
+			}
+			
+			if(img && hasBeenUpdated){
+				await db.none(`${statement} img = $1 where id = $2`, [img, id])
+			}
+			
+			if(season && hasBeenUpdated){
+				await db.none(`${statement} season = $1 where id = $2`, [season, id])
+			}
+			
+			if(gender && hasBeenUpdated){
+				await db.none(`${statement} gender = $1 where id = $2`, [gender, id])
+			}
 
 
 			res.json({
@@ -83,6 +107,8 @@ module.exports = function (app, db) {
 
 			// insert a new garment in the database
 
+			db.none(`insert into garment (description, price, img, season, gender) values($1, $2, $3, $4, $5)`, [description, price, img, season, gender])
+
 			res.json({
 				status: 'success',
 			});
@@ -99,6 +125,7 @@ module.exports = function (app, db) {
 	app.get('/api/garments/grouped', async function (req, res) {
 		const result = []		
 		// use group by query with order by asc on count(*)
+		result = await db.many(`select count(*) from garment group by gender`)
 		res.json({
 			data: result
 		})
@@ -123,6 +150,4 @@ module.exports = function (app, db) {
 			})
 		}
 	});
-
-
 }
