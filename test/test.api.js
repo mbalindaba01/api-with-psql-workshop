@@ -186,7 +186,8 @@ describe('The Garment API', function () {
 				.get(`/api/garments/grouped`)
 				.expect(200);
 
-		const garmentsGrouped = result.body;
+		const garmentsGrouped = result.body
+		;
 
 		// write your code above this line
 		const expectedResult = [

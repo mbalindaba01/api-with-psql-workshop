@@ -123,9 +123,8 @@ module.exports = function (app, db) {
 	});
 
 	app.get('/api/garments/grouped', async function (req, res) {
-		const result = []		
 		// use group by query with order by asc on count(*)
-		result = await db.many(`select count(*) from garment group by gender`)
+		const result = await db.many(`select count(*), gender from garment group by gender order by count(*) asc`);
 		console.log(result)
 		res.json({
 			data: result
