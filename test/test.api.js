@@ -33,7 +33,7 @@ describe('The Garment API', function () {
 		const response = await supertest(app)
 			.get('/api/test')
 			.expect(200);
-
+		
 		assert.deepStrictEqual({ name: 'joe' }, response.body);
 
 	});
@@ -187,7 +187,6 @@ describe('The Garment API', function () {
 				.expect(200);
 
 		const garmentsGrouped = result.body;
-		// console.log(garmentsGrouped);
 
 		// write your code above this line
 		const expectedResult = [

@@ -107,7 +107,7 @@ module.exports = function (app, db) {
 
 			// insert a new garment in the database
 
-			db.none(`insert into garment (description, price, img, season, gender) values($1, $2, $3, $4, $5)`, [description, price, img, season, gender])
+			await db.none(`insert into garment (description, price, img, season, gender) values($1, $2, $3, $4, $5)`, [description, price, img, season, gender])
 
 			res.json({
 				status: 'success',
@@ -126,6 +126,7 @@ module.exports = function (app, db) {
 		const result = []		
 		// use group by query with order by asc on count(*)
 		result = await db.many(`select count(*) from garment group by gender`)
+		console.log(result)
 		res.json({
 			data: result
 		})
