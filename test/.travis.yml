@@ -1,7 +1,7 @@
 language: node_js
 
 env:
-  - DATABASE_URL=postgres://postgres@localhost:5432/garment_app
+  - DATABASE_URL=postgresql://postgres@localhost:5432/garment_app
 
 node_js:  
   - 12
